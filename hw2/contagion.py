@@ -45,7 +45,7 @@ def is_cascade(result):
 def get_num_infected(result):
 	return sum(1 for x in result.values() if x == 'X')
 
-def question_9():
+def question_9a():
 	# Question 9a
 	print('Question 9a')
 	figure_4_1a = create_figure_4_1a()
@@ -76,10 +76,7 @@ def question_9():
 	print('Figure 4.1b: complete cascade is {} with S = {} and threshold q = {}'.format(is_cascade(result), initial_adopters, threshold))
 	print(result)
 
-	threshold = 0
-	initial_adopters = []
-
-	# Question 9b
+def question_9b():
 	k = 10
 	threshold = 0.1
 	total_num_infected = 0
@@ -91,32 +88,7 @@ def question_9():
 	print('\nQuestion 9b')
 	print('k:{}, q:{}, avg # of infected nodes: {}\n'.format(k, threshold, total_num_infected/float(100)))
 
-	# Question 9c
-	print('Question 9c')
-	thresholds = [round(x*0.05,2) for x in range(0, 11)]
-	ks = [x for x in range(0, 251, 10)]
-	total_num_nodes = nx.number_of_nodes(fb_graph)
-	for q in thresholds:
-		for k in ks:
-			total_num_infected = 0
-			for i in range(10):
-				initial_adopters = random.sample(range(0, total_num_nodes), k)
-				total_num_infected += get_num_infected(contagion_brd(fb_graph, initial_adopters, q))
-
-			print('q:{}, k:{}, infection rate: {} (={}/{})'.format(q, k, (total_num_infected/float(10))/float(total_num_nodes), total_num_infected/float(10), total_num_nodes))
-
-def run_9b():
-	k = 10
-	threshold = 0.1
-	total_num_infected = 0
-	fb_graph = create_fb_graph()
-	for i in range(100):
-		initial_adopters = random.sample(range(0, nx.number_of_nodes(fb_graph)), k)
-		total_num_infected += get_num_infected(contagion_brd(fb_graph, initial_adopters, threshold))
-
-	print('\nQuestion 9b - k:{}, q:{}, avg # of infected nodes: {}\n'.format(k, threshold, total_num_infected/float(100)))
-
-def run_9c():
+def question_9c():
 	print('Question 9c')
 	thresholds = [round(x*0.05,2) for x in range(0, 11)]
 	ks = [x for x in range(0, 251, 10)]
@@ -131,4 +103,6 @@ def run_9c():
 
 			print('q:{}, k:{}, infection rate: {} (={}/{})'.format(q, k, (total_num_infected/float(10))/float(total_num_nodes), total_num_infected/float(10), total_num_nodes))
 
-question_9()
+question_9a()
+question_9b()
+question_9c()
