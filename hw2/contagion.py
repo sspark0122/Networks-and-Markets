@@ -9,7 +9,6 @@
 # https://stackoverflow.com/questions/22842289/generate-n-unique-random-numbers-within-a-range
 
 import networkx as nx
-import matplotlib.pyplot as plt
 from helper import *
 import random
 
@@ -21,19 +20,22 @@ def contagion_brd(G, S, q):
 	# Set X if nodes in G are initial adopters
 	node_dic = {node:'Y' for node in G.nodes}
 	for node in S:
-		if node in G.nodes:
-			node_dic[node] = 'X'
+		node_dic[node] = 'X'
 
-	for node in G.nodes:
-		if node not in S:
-			num_of_X = 0
-			num_of_neighbors = len(G[node])
-			for neighbor in G[node]:
-				if neighbor in node_dic and node_dic[neighbor] == 'X':
-					num_of_X += 1
+	flag = True
+	while flag:
+		flag = False
+		for node in G.nodes:
+			if node not in S:
+				num_of_X = 0
+				num_of_neighbors = len(G[node])
+				for neighbor in G[node]:
+					if node_dic[neighbor] == 'X':
+						num_of_X += 1
 
-			if num_of_X / float(num_of_neighbors) > q and node_dic[node] != 'X':
-				node_dic[node] = 'X'
+				if num_of_X / float(num_of_neighbors) > q and node_dic[node] != 'X':
+					node_dic[node] = 'X'
+					flag = True	# If any node choose X, loop one more time
 
 	return node_dic
 
@@ -43,7 +45,8 @@ def is_cascade(result):
 def get_num_infected(result):
 	return sum(1 for x in result.values() if x == 'X')
 
-def run_9a():
+def question_9():
+	# Question 9a
 	print('Question 9a')
 	figure_4_1a = create_figure_4_1a()
 	initial_adopters = ['a']
@@ -73,6 +76,35 @@ def run_9a():
 	print('Figure 4.1b: complete cascade is {} with S = {} and threshold q = {}'.format(is_cascade(result), initial_adopters, threshold))
 	print(result)
 
+	threshold = 0
+	initial_adopters = []
+
+	# Question 9b
+	k = 10
+	threshold = 0.1
+	total_num_infected = 0
+	fb_graph = create_fb_graph()
+	for i in range(100):
+		initial_adopters = random.sample(range(0, nx.number_of_nodes(fb_graph)), k)
+		total_num_infected += get_num_infected(contagion_brd(fb_graph, initial_adopters, threshold))
+
+	print('\nQuestion 9b')
+	print('k:{}, q:{}, avg # of infected nodes: {}\n'.format(k, threshold, total_num_infected/float(100)))
+
+	# Question 9c
+	print('Question 9c')
+	thresholds = [round(x*0.05,2) for x in range(0, 11)]
+	ks = [x for x in range(0, 251, 10)]
+	total_num_nodes = nx.number_of_nodes(fb_graph)
+	for q in thresholds:
+		for k in ks:
+			total_num_infected = 0
+			for i in range(10):
+				initial_adopters = random.sample(range(0, total_num_nodes), k)
+				total_num_infected += get_num_infected(contagion_brd(fb_graph, initial_adopters, q))
+
+			print('q:{}, k:{}, infection rate: {} (={}/{})'.format(q, k, (total_num_infected/float(10))/float(total_num_nodes), total_num_infected/float(10), total_num_nodes))
+
 def run_9b():
 	k = 10
 	threshold = 0.1
@@ -86,7 +118,7 @@ def run_9b():
 
 def run_9c():
 	print('Question 9c')
-	thresholds = [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+	thresholds = [round(x*0.05,2) for x in range(0, 11)]
 	ks = [x for x in range(0, 251, 10)]
 	fb_graph = create_fb_graph()
 	total_num_nodes = nx.number_of_nodes(fb_graph)
@@ -97,8 +129,6 @@ def run_9c():
 				initial_adopters = random.sample(range(0, total_num_nodes), k)
 				total_num_infected += get_num_infected(contagion_brd(fb_graph, initial_adopters, q))
 
-			print('q:{}, k:{}, infection rate: {}'.format(q, k, (total_num_infected/float(10))/float(total_num_nodes)))
+			print('q:{}, k:{}, infection rate: {} (={}/{})'.format(q, k, (total_num_infected/float(10))/float(total_num_nodes), total_num_infected/float(10), total_num_nodes))
 
-run_9a()
-run_9b()
-run_9c()
+question_9()

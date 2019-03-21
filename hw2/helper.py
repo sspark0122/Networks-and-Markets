@@ -1,5 +1,4 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 
 # Create a graph in Figure 4.1.a
 # Reference: https://networkx.github.io/documentation/stable/reference/classes/graph.html
