@@ -49,14 +49,14 @@ def question_9a():
 	# Question 9a
 	print('Question 9a')
 	figure_4_1a = create_figure_4_1a()
-	initial_adopters = ['a']
+	initial_adopters = ['a','b']
 	threshold = 0.4
 	result = contagion_brd(figure_4_1a, initial_adopters, threshold)
 	print('Figure 4.1a: complete cascade is {} with S = {} and threshold q = {}'.format(is_cascade(result), initial_adopters, threshold))
 	print(result)
 
 	figure_4_1a = create_figure_4_1a()
-	initial_adopters = ['a']
+	initial_adopters = ['a','b']
 	threshold = 0.5
 	result = contagion_brd(figure_4_1a, initial_adopters, threshold)
 	print('Figure 4.1a: complete cascade is {} with S = {} and threshold q = {}'.format(is_cascade(result), initial_adopters, threshold))
